@@ -9,6 +9,14 @@ import (
 
 func TestSliceSubscriber(t *testing.T) {
 
+	t.Run("slice subscriber is a subscriber", func(t *testing.T) {
+		assert.Implements(t, (*Subscriber[int, []int])(nil), new(SliceSubscriber[int]))
+	})
+
+	t.Run("slice subscriber is an inletter", func(t *testing.T) {
+		assert.Implements(t, (*Inletter[int])(nil), new(SliceSubscriber[int]))
+	})
+
 	t.Run("slice subscriber attached to a slice publisher", func(t *testing.T) {
 		expected := []int{1, 2, 3}
 		pub := NewSlicePublisher(expected)
@@ -35,7 +43,7 @@ func TestSliceSubscriber(t *testing.T) {
 		flow.Connect(sub)
 
 		pub.Publish()
-		flow.Run()
+		flow.Execute()
 		sub.Subscribe()
 
 		assert.ElementsMatch(t, expected, sub.Value())

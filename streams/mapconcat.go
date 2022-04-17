@@ -1,38 +1,38 @@
 package streams
 
 type MapConcat[In, Out any] struct {
-	In   chan In
-	Out  chan Out
-	Func func(In) []Out
+	in  chan In
+	out chan Out
+	fun func(In) []Out
 }
 
 func NewMapConcat[In, Out any](f func(In) []Out) *MapConcat[In, Out] {
 	return &MapConcat[In, Out]{
-		In:   make(chan In),
-		Out:  make(chan Out),
-		Func: f,
+		in:  make(chan In),
+		out: make(chan Out),
+		fun: f,
 	}
 }
 
 func (mc *MapConcat[In, Out]) Inlet() chan In {
-	return mc.In
+	return mc.in
 }
 
 func (mc *MapConcat[In, Out]) Connect(o Inletter[Out]) {
-	mc.Out = o.Inlet()
+	mc.out = o.Inlet()
 }
 
-func (mc *MapConcat[In, Out]) Run() {
+func (mc *MapConcat[In, Out]) Execute() {
 	go func() {
-		defer close(mc.Out)
+		defer close(mc.out)
 		outData := []Out{}
 
-		for i := range mc.In {
-			outData = append(outData, mc.Func(i)...)
+		for i := range mc.in {
+			outData = append(outData, mc.fun(i)...)
 		}
 
 		for _, o := range outData {
-			mc.Out <- o
+			mc.out <- o
 		}
 	}()
 }

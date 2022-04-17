@@ -18,6 +18,10 @@ func NewSliceSubscriber[T any]() Subscriber[T, []T] {
 	}
 }
 
+func (ss *SliceSubscriber[T]) Inlet() chan T {
+	return ss.in
+}
+
 func (ss *SliceSubscriber[T]) Subscribe() {
 	for x := range ss.in {
 		ss.data = append(ss.data, x)
@@ -26,8 +30,4 @@ func (ss *SliceSubscriber[T]) Subscribe() {
 
 func (ss *SliceSubscriber[T]) Value() []T {
 	return ss.data
-}
-
-func (ss *SliceSubscriber[T]) Inlet() chan T {
-	return ss.in
 }

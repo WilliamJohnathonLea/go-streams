@@ -21,13 +21,13 @@ func TestMapConcat(t *testing.T) {
 		result := []int{}
 
 		go func() {
-			intMapConcat.In <- 5
-			close(intMapConcat.In)
+			intMapConcat.in <- 5
+			close(intMapConcat.in)
 		}()
 
-		intMapConcat.Run()
+		intMapConcat.Execute()
 
-		for i := range intMapConcat.Out {
+		for i := range intMapConcat.out {
 			result = append(result, i)
 		}
 
@@ -52,14 +52,14 @@ func TestMapConcat(t *testing.T) {
 		result := []string{}
 
 		go func() {
-			intMapConcat.In <- 5
-			close(intMapConcat.In)
+			intMapConcat.in <- 5
+			close(intMapConcat.in)
 		}()
 
-		intMapConcat.Run()
-		intToStringMapConcat.Run()
+		intMapConcat.Execute()
+		intToStringMapConcat.Execute()
 
-		for i := range intToStringMapConcat.Out {
+		for i := range intToStringMapConcat.out {
 			result = append(result, i)
 		}
 
@@ -89,15 +89,15 @@ func TestMapConcat(t *testing.T) {
 		result := []string{}
 
 		go func() {
-			intMapConcat.In <- 5
-			close(intMapConcat.In)
+			intMapConcat.in <- 5
+			close(intMapConcat.in)
 		}()
 
-		intMapConcat.Run()
-		intToStringMapConcat.Run()
-		stringDuplicateMapConcat.Run()
+		intMapConcat.Execute()
+		intToStringMapConcat.Execute()
+		stringDuplicateMapConcat.Execute()
 
-		for i := range stringDuplicateMapConcat.Out {
+		for i := range stringDuplicateMapConcat.out {
 			result = append(result, i)
 		}
 

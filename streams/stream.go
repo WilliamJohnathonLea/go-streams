@@ -7,3 +7,4 @@ type Inletter[T any] interface {
 type StreamConnector[T any] interface {
 	Connect(Inletter[T])
 }
+
