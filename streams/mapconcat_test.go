@@ -25,7 +25,7 @@ func TestMapConcat(t *testing.T) {
 			close(intMapConcat.In)
 		}()
 
-		go intMapConcat.Run()
+		intMapConcat.Run()
 
 		for i := range intMapConcat.Out {
 			result = append(result, i)
@@ -56,8 +56,8 @@ func TestMapConcat(t *testing.T) {
 			close(intMapConcat.In)
 		}()
 
-		go intMapConcat.Run()
-		go intToStringMapConcat.Run()
+		intMapConcat.Run()
+		intToStringMapConcat.Run()
 
 		for i := range intToStringMapConcat.Out {
 			result = append(result, i)
@@ -93,9 +93,9 @@ func TestMapConcat(t *testing.T) {
 			close(intMapConcat.In)
 		}()
 
-		go intMapConcat.Run()
-		go intToStringMapConcat.Run()
-		go stringDuplicateMapConcat.Run()
+		intMapConcat.Run()
+		intToStringMapConcat.Run()
+		stringDuplicateMapConcat.Run()
 
 		for i := range stringDuplicateMapConcat.Out {
 			result = append(result, i)

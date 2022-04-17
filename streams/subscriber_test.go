@@ -35,7 +35,7 @@ func TestSliceSubscriber(t *testing.T) {
 		flow.Connect(sub)
 
 		pub.Publish()
-		go flow.Run()
+		flow.Run()
 		sub.Subscribe()
 
 		assert.ElementsMatch(t, expected, sub.Value())
