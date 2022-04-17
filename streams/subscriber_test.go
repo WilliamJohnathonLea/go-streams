@@ -34,7 +34,7 @@ func TestSliceSubscriber(t *testing.T) {
 		input := []int{1, 2, 3}
 		expected := []string{"1", "2", "3"}
 		pub := NewSlicePublisher(input)
-		flow := NewMapConcat(func(i int) []string {
+		flow := MapConcatFlow(func(i int) []string {
 			return []string{fmt.Sprint(i)}
 		})
 		sub := NewSliceSubscriber[string]()
@@ -43,7 +43,7 @@ func TestSliceSubscriber(t *testing.T) {
 		flow.Connect(sub)
 
 		pub.Publish()
-		flow.Execute()
+		flow.Flow()
 		sub.Subscribe()
 
 		assert.ElementsMatch(t, expected, sub.Value())

@@ -9,8 +9,12 @@ import (
 
 func TestMapConcat(t *testing.T) {
 
+	t.Run("map concat is a flow", func(t *testing.T) {
+		assert.Implements(t, (*Flow[int, int])(nil), new(MapConcat[int, int]))
+	})
+
 	t.Run("singular flow", func(t *testing.T) {
-		intMapConcat := NewMapConcat(func(i int) []int {
+		intMapConcat := newMapConcat(func(i int) []int {
 			out := []int{}
 			for j := 0; j < i; j++ {
 				out = append(out, j)
@@ -25,7 +29,7 @@ func TestMapConcat(t *testing.T) {
 			close(intMapConcat.in)
 		}()
 
-		intMapConcat.Execute()
+		intMapConcat.Flow()
 
 		for i := range intMapConcat.out {
 			result = append(result, i)
@@ -35,14 +39,14 @@ func TestMapConcat(t *testing.T) {
 	})
 
 	t.Run("two connected flows", func(t *testing.T) {
-		intMapConcat := NewMapConcat(func(i int) []int {
+		intMapConcat := newMapConcat(func(i int) []int {
 			out := []int{}
 			for j := 0; j < i; j++ {
 				out = append(out, j)
 			}
 			return out
 		})
-		intToStringMapConcat := NewMapConcat(func(i int) []string {
+		intToStringMapConcat := newMapConcat(func(i int) []string {
 			return []string{fmt.Sprint(i)}
 		})
 
@@ -56,8 +60,8 @@ func TestMapConcat(t *testing.T) {
 			close(intMapConcat.in)
 		}()
 
-		intMapConcat.Execute()
-		intToStringMapConcat.Execute()
+		intMapConcat.Flow()
+		intToStringMapConcat.Flow()
 
 		for i := range intToStringMapConcat.out {
 			result = append(result, i)
@@ -67,18 +71,18 @@ func TestMapConcat(t *testing.T) {
 	})
 
 	t.Run("three connected flows", func(t *testing.T) {
-		intMapConcat := NewMapConcat(func(i int) []int {
+		intMapConcat := newMapConcat(func(i int) []int {
 			out := []int{}
 			for j := 0; j < i; j++ {
 				out = append(out, j)
 			}
 			return out
 		})
-		intToStringMapConcat := NewMapConcat(func(i int) []string {
+		intToStringMapConcat := newMapConcat(func(i int) []string {
 			return []string{fmt.Sprint(i)}
 		})
 
-		stringDuplicateMapConcat := NewMapConcat(func(s string) []string {
+		stringDuplicateMapConcat := newMapConcat(func(s string) []string {
 			return []string{s, s}
 		})
 
@@ -93,9 +97,9 @@ func TestMapConcat(t *testing.T) {
 			close(intMapConcat.in)
 		}()
 
-		intMapConcat.Execute()
-		intToStringMapConcat.Execute()
-		stringDuplicateMapConcat.Execute()
+		intMapConcat.Flow()
+		intToStringMapConcat.Flow()
+		stringDuplicateMapConcat.Flow()
 
 		for i := range stringDuplicateMapConcat.out {
 			result = append(result, i)

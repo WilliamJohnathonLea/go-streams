@@ -6,7 +6,7 @@ type MapConcat[In, Out any] struct {
 	fun func(In) []Out
 }
 
-func NewMapConcat[In, Out any](f func(In) []Out) *MapConcat[In, Out] {
+func newMapConcat[In, Out any](f func(In) []Out) *MapConcat[In, Out] {
 	return &MapConcat[In, Out]{
 		in:  make(chan In),
 		out: make(chan Out),
@@ -22,7 +22,7 @@ func (mc *MapConcat[In, Out]) Connect(o Inletter[Out]) {
 	mc.out = o.Inlet()
 }
 
-func (mc *MapConcat[In, Out]) Execute() {
+func (mc *MapConcat[In, Out]) Flow() {
 	go func() {
 		defer close(mc.out)
 		outData := []Out{}
