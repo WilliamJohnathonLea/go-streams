@@ -3,6 +3,7 @@ package streams
 type Flow[In, Out any] interface {
 	Inletter[In]
 	StreamConnector[Out]
+	StreamExector
 	Flow()
 }
 

@@ -1,6 +1,7 @@
 package streams
 
 type Publisher[Out any] interface {
+	StreamExector
 	StreamConnector[Out]
 	Publish() <-chan Out
 }
@@ -18,13 +19,15 @@ func NewSlicePublisher[Out any](slice []Out) Publisher[Out] {
 }
 
 func (sp *SlicePublisher[Out]) Publish() <-chan Out {
-	go func() {
-		for _, d := range sp.data {
-			sp.out <- d
-		}
-		close(sp.out)
-	}()
+	for _, d := range sp.data {
+		sp.out <- d
+	}
+	close(sp.out)
 	return sp.out
+}
+
+func (sp *SlicePublisher[Out]) Execute() {
+	sp.Publish()
 }
 
 func (sp *SlicePublisher[Out]) Connect(o Inletter[Out]) {

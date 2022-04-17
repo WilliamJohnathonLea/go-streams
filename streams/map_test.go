@@ -27,7 +27,7 @@ func TestMap(t *testing.T) {
 			close(intMapConcat.in)
 		}()
 
-		intMapConcat.Flow()
+		go intMapConcat.Flow()
 
 		for i := range intMapConcat.out {
 			result = append(result, i)
@@ -56,8 +56,8 @@ func TestMap(t *testing.T) {
 			close(intMapConcat.in)
 		}()
 
-		intMapConcat.Flow()
-		intToStringMapConcat.Flow()
+		go intMapConcat.Flow()
+		go intToStringMapConcat.Flow()
 
 		for i := range intToStringMapConcat.out {
 			result = append(result, i)

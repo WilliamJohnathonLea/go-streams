@@ -23,16 +23,18 @@ func (mc *MapConcat[In, Out]) Connect(o Inletter[Out]) {
 }
 
 func (mc *MapConcat[In, Out]) Flow() {
-	go func() {
-		defer close(mc.out)
-		outData := []Out{}
+	defer close(mc.out)
+	outData := []Out{}
 
-		for i := range mc.in {
-			outData = append(outData, mc.fun(i)...)
-		}
+	for i := range mc.in {
+		outData = append(outData, mc.fun(i)...)
+	}
 
-		for _, o := range outData {
-			mc.out <- o
-		}
-	}()
+	for _, o := range outData {
+		mc.out <- o
+	}
+}
+
+func (mc *MapConcat[In, Out]) Execute() {
+	mc.Flow()
 }

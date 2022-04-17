@@ -1,6 +1,7 @@
 package streams
 
 type Subscriber[In, Out any] interface {
+	StreamExector
 	Inletter[In]
 	Subscribe()
 	Value() Out
@@ -26,6 +27,10 @@ func (ss *SliceSubscriber[T]) Subscribe() {
 	for x := range ss.in {
 		ss.data = append(ss.data, x)
 	}
+}
+
+func (ss *SliceSubscriber[T]) Execute() {
+	ss.Subscribe()
 }
 
 func (ss *SliceSubscriber[T]) Value() []T {
